@@ -3,6 +3,11 @@
 #define TEMPAD_EN 1
 
 
+
+///addd000
+
+
+
  
 //__IO u16 ADC_ConvertedValue[2]; 
 
