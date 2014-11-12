@@ -1,0 +1,7 @@
+/Demo/USER/*.uvproj
+/Demo/USER/Visual Studio Project/*.sln
+/Demo/USER/Visual Studio Project/*.filters
+/Demo/USER/Visual Studio Project/*.user
+/Demo/USER/Visual Studio Project/*.sdf
+/Demo/USER/Visual Studio Project/*.suo
+/Demo/USER/Visual Studio Project/*.vcxproj
