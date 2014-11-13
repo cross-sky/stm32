@@ -23,7 +23,7 @@
 
 #define LCD_CTRL   	  	GPIOB		//定义TFT数据端口
 #define LCD_LED        	GPIO_Pin_9  //MCU_PB9--->>TFT --BL
-#define LCD_RS         	GPIO_Pin_10	//PB11--->>TFT --RS/DC
+#define LCD_RS         	GPIO_Pin_10	//PB10--->>TFT --RS/DC
 #define LCD_CS        	GPIO_Pin_11 //MCU_PB11--->>TFT --CS/CE  已接地；
 #define LCD_RST     	GPIO_Pin_12	//PB10--->>TFT --RST
 #define LCD_SCL        	GPIO_Pin_13	//PB13--->>TFT --SCL/SCK

@@ -26,6 +26,7 @@ void LedGpioConfig(void)
 
 	/* πÿ±’À˘”–ledµ∆	*/;
 
+
 	GPIO_SetBits(GPIOC, GPIO_Pin_1 | GPIO_Pin_3 | GPIO_Pin_13);	 
 }
 

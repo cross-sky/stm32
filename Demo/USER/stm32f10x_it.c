@@ -164,7 +164,8 @@ void EXTI9_5_IRQHandler(void)
 
 void USART1_IRQHandler( void )
 {
-	
+	UART1Receive();
+
 // 	if ( USART_GetITStatus( USART1, USART_IT_RXNE) != RESET)
 // 	{
 // 		USART_ClearITPendingBit( USART1, USART_IT_RXNE);
