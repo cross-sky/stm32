@@ -12,6 +12,7 @@
 #include "Tpwm.h"
 #include "Tkey.h"
 #include "Tuart.h"
+#include "Tadc.h"
 
 //IO口操作,只对单一的IO口!
 //确保n的值小于16!

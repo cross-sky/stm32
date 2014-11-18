@@ -293,7 +293,11 @@ void UART1Receive(void)
 
 void Usart1SendBackTest(void)
 {
-	u8 i;
+		u8 i;
+#if TestEx
+	TestExcuteTime(1);
+#endif
+
 	if (usart1_sta == 1)
 	{
 		for (i=0; i<8; i++)
@@ -302,5 +306,9 @@ void Usart1SendBackTest(void)
 		}
 		usart1_sta = 0;
 	}
+
+#if TestEx
+	TestExcuteTime(0);
+#endif
 
 }

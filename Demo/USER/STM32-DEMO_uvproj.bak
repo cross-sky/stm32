@@ -443,6 +443,16 @@
               <FileType>1</FileType>
               <FilePath>.\Tpwm.c</FilePath>
             </File>
+            <File>
+              <FileName>Tkey.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Tkey.c</FilePath>
+            </File>
+            <File>
+              <FileName>Tuart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Tuart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -18,6 +18,7 @@ static void TIM3_GPIO_Config(void)
 
 	GPIO_Initstructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1;
 	GPIO_Initstructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Initstructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB,&GPIO_Initstructure);
 
 
@@ -31,12 +32,12 @@ static void TIM3_Mode_Config(void)
 	//如果是电机pwm调速，占空比会变化的;
 	//u16 ccr1_val = 500;
 	//u16 ccr2_val = 375;
-	u16 ccr3_val = 250;
-	u16 ccr4_val = 125;
+	u16 ccr3_val = 2500;
+	u16 ccr4_val = 1250;
 
-	TIM_TimeBaseStructure.TIM_Period = 999;
+	TIM_TimeBaseStructure.TIM_Period = 9999;
 	TIM_TimeBaseStructure.TIM_Prescaler = 0;
-	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV4;
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV2;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
 	
