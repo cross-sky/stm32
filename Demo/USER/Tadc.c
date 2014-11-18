@@ -250,6 +250,7 @@ void AdcValue(void)
 		static u8 i;
 #if TestEx
 	TestExcuteTime(1);
+		G_TestExcut=1;
 #endif
 
 
@@ -261,6 +262,7 @@ void AdcValue(void)
 
 #if TestEx
 	TestExcuteTime(0);
+		G_TestExcut=0;
 #endif
 }
 

@@ -4,6 +4,7 @@
 #define D_4MS	250
 #define D_1MS	1000			//1ms÷–∂œ1¥Œ
 
+u8 G_TestExcut;
 
 void SystickInit( void )
 {

@@ -2,6 +2,7 @@
 #define __TSYSTICK_H
 
 #define TestEx 1
+extern u8 G_TestExcut;
 
 extern void SystickInit( void );
 void TestExcuteTimeGpioConfig(void);

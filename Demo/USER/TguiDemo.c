@@ -4,6 +4,7 @@ void Draw_Menu(void)
 {
 #if TestEx
 	TestExcuteTime(1);
+	G_TestExcut=1;
 #endif
 
 //	Lcd_Clear(LIGHTBLUE);
@@ -14,6 +15,7 @@ void Draw_Menu(void)
 
 #if TestEx
 	TestExcuteTime(0);
+		G_TestExcut=0;
 #endif
 }
 
@@ -24,6 +26,7 @@ void TaskLineLevel(void)
 	
 	#if TestEx
 	TestExcuteTime(1);
+	G_TestExcut=1;
 #endif
 
 
@@ -46,6 +49,7 @@ void TaskLineLevel(void)
 
 #if TestEx
 	TestExcuteTime(0);
+	G_TestExcut=0;
 #endif
 
 }
@@ -55,6 +59,7 @@ void TaskDrawNum(void)
 		static u8 i=0;
 #if TestEx
 	TestExcuteTime(1);
+	G_TestExcut=1;
 #endif
 
 
@@ -64,6 +69,7 @@ void TaskDrawNum(void)
 
 #if TestEx
 	TestExcuteTime(0);
+	G_TestExcut=0;
 #endif
 }
 

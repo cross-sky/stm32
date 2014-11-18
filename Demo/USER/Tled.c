@@ -56,6 +56,7 @@ void LED1on(void)
 {
 #if TestEx
 	TestExcuteTime(1);
+	G_TestExcut=1;
 #endif
 
 	GPIO_WriteBit( GPIOC, GPIO_Pin_1,
@@ -63,6 +64,7 @@ void LED1on(void)
 
 #if TestEx
 	TestExcuteTime(0);
+	G_TestExcut=0;
 #endif
 }
 
