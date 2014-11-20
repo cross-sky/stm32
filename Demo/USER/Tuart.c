@@ -8,6 +8,9 @@ u8	usart1_tx=0;
 u8  usart1_len = 0;
 u8	usart1_sta = 0;
 u8	usart1_recdata[ USART_REC_LEN ];
+u8	usart1_sendbuf[ USART_REC_LEN ]={0,1,2,3,4,5,6};
+u8	Flag_uart_send=1;
+
 
 //串口，假如最大波特率只需115.2k，那么用2M的GPIO的引脚速度就够了，既省电也噪声小。;
 //I2C接口，假如使用400k波特率，若想把余量留大些，那么用2M的GPIO的引脚速度或许不够，这时可以选用10M的GPIO引脚速度;
@@ -19,8 +22,37 @@ void uart_init( u32 bound )
 	GPIO_InitTypeDef	gpio_init_structure;
 	USART_InitTypeDef	usart_init_structure;
 	NVIC_InitTypeDef	nvic_init_structure;
+	DMA_InitTypeDef		dma_init_structure;
 
-	RCC_APB2PeriphClockCmd( RCC_APB2Periph_USART1|RCC_APB2Periph_GPIOA, ENABLE );
+	RCC_APB2PeriphClockCmd( RCC_APB2Periph_USART1|RCC_APB2Periph_GPIOA|RCC_APB2Periph_AFIO, ENABLE );
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,ENABLE);
+	
+	#if EN_USART1_DMATx
+
+
+	nvic_init_structure.NVIC_IRQChannel = DMA1_Channel4_IRQn;
+	nvic_init_structure.NVIC_IRQChannelPreemptionPriority = 0;
+	nvic_init_structure.NVIC_IRQChannelSubPriority = 3;
+	nvic_init_structure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&nvic_init_structure);
+
+	DMA_DeInit(DMA1_Channel4);
+	dma_init_structure.DMA_PeripheralBaseAddr = USART1_DR_Base;
+	dma_init_structure.DMA_MemoryBaseAddr = (u32)usart1_sendbuf;
+	dma_init_structure.DMA_DIR = DMA_DIR_PeripheralDST;
+	dma_init_structure.DMA_BufferSize = 0x0f;
+	dma_init_structure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+	dma_init_structure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+	dma_init_structure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+	dma_init_structure.DMA_MemoryDataSize = DMA_PeripheralDataSize_Byte;
+	dma_init_structure.DMA_Mode = DMA_Mode_Normal;
+	dma_init_structure.DMA_Priority = DMA_Priority_High;
+	dma_init_structure.DMA_M2M = DMA_M2M_Disable;
+	DMA_Init(DMA1_Channel4, &dma_init_structure);
+	DMA_ITConfig(DMA1_Channel4, DMA_IT_TC,ENABLE);
+	
+#endif
+	
 	USART_DeInit( USART1 );
 
 	//pA.9 复用推挽输出 USART1_TX;
@@ -53,7 +85,11 @@ void uart_init( u32 bound )
 	//开启中断;
 	USART_ITConfig( USART1, USART_IT_RXNE, ENABLE);
 #endif
+
+
+	USART_DMACmd(USART1, USART_DMAReq_Tx,ENABLE);
 	USART_Cmd( USART1, ENABLE);
+
 
 }
 
@@ -314,3 +350,39 @@ void Usart1SendBackTest(void)
 #endif
 
 }
+
+///////////////////////////////////////////////
+/*
+定时器复位模式，dma接收，定时器超时中断
+上层定义好2帧之间的时间
+*/
+
+void Usart1DmaSendTest(void)
+{
+	static u8 i=1;
+	
+	#if TestEx
+	TestExcuteTime(1);
+		G_TestExcut=1;
+#endif
+	
+	if (Flag_uart_send == 1)
+	{
+		Flag_uart_send =1;
+		DMA_SetCurrDataCounter(DMA1_Channel4,i);
+		DMA_Cmd(DMA1_Channel4,ENABLE);
+		i++;
+		if (i>5)
+		{
+			i=1;
+		}
+	}
+	
+	#if TestEx
+	TestExcuteTime(0);
+		G_TestExcut=0;
+#endif
+	
+}
+
+

@@ -7,8 +7,9 @@ TPC_TASK TaskComps[]=
 	{0, 250,  250, TaskLineLevel},
 	{0, 500,  500, Draw_Menu},
 	{0, 250,  250, TaskDrawNum},
-	{0, 5,	  5,	Usart1SendBackTest},//没加任务....
+	{0, 5,	  5,   Usart1SendBackTest},//没加任务....
 	{0, 250,  250, AdcValue},
+	{0,	250,  250, UsartDmaTest},
 //	{0, 500,  500,  TaskLineVertical},
 };
 
@@ -23,7 +24,13 @@ void TaskInit(void)
 	Draw_Menu();			//
 	TIM3_PWM_init();		//pwm初始化 PB0,PB1
 	KeyExit_pb7_config();	//按键初始化 PB7
+
+#if USART1_DMA_RT
+	UART1_Init();
+#else
 	uart_init(115200);		//串口初始化 115.2k;pa9,pa10
+#endif
+
 	ADC1Init();				//PC.0
 }
 

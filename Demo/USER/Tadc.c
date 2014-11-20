@@ -166,7 +166,7 @@ static void adc1_modeN_config( void)
 	/*设定DMA工作再循环缓存模式，即告诉DMA要不停的搬运，不能偷懒;*/ 
 	dma_init_structure.DMA_Mode = DMA_Mode_Circular;
 	 /*设定DMA选定的通道软件优先级;*/
-	dma_init_structure.DMA_Priority = DMA_Priority_High;
+	dma_init_structure.DMA_Priority = DMA_Priority_Low;
 	dma_init_structure.DMA_M2M = DMA_M2M_Disable;
 	DMA_Init( DMA1_Channel1, &dma_init_structure);
 
