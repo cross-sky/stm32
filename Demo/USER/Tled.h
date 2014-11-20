@@ -29,7 +29,7 @@
 
 extern void LedGpioConfig(void);
 extern void LEDdisplay(u8 LightChannel);
-extern void LED1on(void);
+ void LED1on(void);
 
 
 #endif /* __LED_H */

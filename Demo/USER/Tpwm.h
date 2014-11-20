@@ -3,7 +3,7 @@
 
 #include "stm32f10x.h"
 
-extern void TIM3_PWM_init(void);
+void TIM3_PWM_init(void);
 
 
 #endif

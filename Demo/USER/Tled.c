@@ -18,13 +18,14 @@ void LedGpioConfig(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;   
 
 	/*设置引脚速率为50MHz */   
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz; 
 
 
 	/*调用库函数，初始化GPIOC*/;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);		  
 
 	/* 关闭所有led灯	*/;
+
 
 	GPIO_SetBits(GPIOC, GPIO_Pin_1 | GPIO_Pin_3 | GPIO_Pin_13);	 
 }
@@ -53,8 +54,18 @@ void LEDdisplay(u8 LightChannel)
 
 void LED1on(void)
 {
+#if TestEx
+	TestExcuteTime(1);
+	G_TestExcut=1;
+#endif
+
 	GPIO_WriteBit( GPIOC, GPIO_Pin_1,
 		( BitAction)( (1-GPIO_ReadOutputDataBit( GPIOC, GPIO_Pin_1))));
+
+#if TestEx
+	TestExcuteTime(0);
+	G_TestExcut=0;
+#endif
 }
 
 

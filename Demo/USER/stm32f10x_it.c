@@ -164,7 +164,13 @@ void EXTI9_5_IRQHandler(void)
 
 void USART1_IRQHandler( void )
 {
-	
+#if USART1_DMA_RT
+	Usart1_Handle();
+#else
+	UART1Receive();
+#endif
+}
+
 // 	if ( USART_GetITStatus( USART1, USART_IT_RXNE) != RESET)
 // 	{
 // 		USART_ClearITPendingBit( USART1, USART_IT_RXNE);
@@ -191,11 +197,26 @@ void USART1_IRQHandler( void )
 // 		USART_ReceiveData( USART1);  //¶ÁDR 
 // 	}
 
+//}
+
+void DMA1_Channel5_IRQHandler(void)
+{
+	Dma1_Channel5Handle();
 }
 
-/*
-void DMA1_Channel7_IRQHandler(void)
+void DMA1_Channel4_IRQHandler(void)
 {
+
+#if USART1_DMA_RT
+	Dma1_Channel4Handle();
+#else
+	DMA_ClearFlag(DMA1_FLAG_TC4);
+	DMA_Cmd(DMA1_Channel4,DISABLE);
+	Flag_uart_send = 1;
+#endif	
+
+}
+/*
 	u8 i;
 	extern u16 i2c_rx_buf[14]; 
 	extern int16_t accel_gyro[7];

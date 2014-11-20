@@ -1,15 +1,20 @@
-#include "adc.h"
+#include "ComInclude.h"
+
 
 #define TEMPAD_EN 1
 
+static __IO u16 s_adc1_converted_value[2];
+/*定义数组变量ADC_ConvertedValue[2],分别放AD1通道10和11转换的数据;*/ 
 
+// 局部变量，用于存从flash读到的电压值;
+static __IO u16 s_adc_temp_value;
+////存放计算后的温度值;
+static __IO u16 s_current_temp;
+////温度为25摄氏度时的电压值;
+static __IO u16 V25 = 0x6ee;
 
-///addd000
-//qww
-//
+static __IO u16 avg_slop = 0x05;
 
- 
-//__IO u16 ADC_ConvertedValue[2]; 
 
 /*
  * 函数名：ADC1_GPIO_Config;
@@ -37,13 +42,6 @@ static void adc1_gpio_config( void)
 
 
 }
-
-/* 函数名：ADC1_Mode_Config
- * 描述  ：配置ADC1的工作模式为MDA模式;
- * 输入  : 无;
- * 输出  ：无;
- * 调用  ：内部调用;
- */
 
 static void adc1_mode_config( void)
 {
@@ -168,7 +166,7 @@ static void adc1_modeN_config( void)
 	/*设定DMA工作再循环缓存模式，即告诉DMA要不停的搬运，不能偷懒;*/ 
 	dma_init_structure.DMA_Mode = DMA_Mode_Circular;
 	 /*设定DMA选定的通道软件优先级;*/
-	dma_init_structure.DMA_Priority = DMA_Priority_High;
+	dma_init_structure.DMA_Priority = DMA_Priority_Low;
 	dma_init_structure.DMA_M2M = DMA_M2M_Disable;
 	DMA_Init( DMA1_Channel1, &dma_init_structure);
 
@@ -219,7 +217,7 @@ static void adc1_modeN_config( void)
 
 }
 
-void adc1_init(void)
+void ADC1Init(void)
 {
 	adc1_gpio_config();
 
@@ -247,10 +245,24 @@ u16 tempadc(void)
 	return s_current_temp;
 }
 
-/*
+void AdcValue(void)
+{
+		static u8 i;
+#if TestEx
+	TestExcuteTime(1);
+		G_TestExcut=1;
+#endif
 
 
+	printf("%f,",adc1_value());
+	i &=0x03;
+	if(i==0x03)
+		printf("%d,",tempadc());
+	i++;
 
+#if TestEx
+	TestExcuteTime(0);
+		G_TestExcut=0;
+#endif
+}
 
-
-*/

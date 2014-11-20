@@ -3,10 +3,13 @@
 
 TPC_TASK TaskComps[]=
 {
-	{0, 1000, 1000, LED1on},
-	{0, 1000,  1000,  TaskLineLevel},
-	{0, 2000, 2000, Draw_Menu},
-	{0,1000,  1000, TaskDrawNum},
+	{0, 250,  250, LED1on},			// 4*250=1s
+	{0, 250,  250, TaskLineLevel},
+	{0, 500,  500, Draw_Menu},
+	{0, 250,  250, TaskDrawNum},
+	{0, 5,	  5,   Usart1SendBackTest},//没加任务....
+	{0, 250,  250, AdcValue},
+	{0,	250,  250, UsartDmaTest},
 //	{0, 500,  500,  TaskLineVertical},
 };
 
@@ -14,12 +17,21 @@ TPC_TASK TaskComps[]=
 
 void TaskInit(void)
 {
-	LedGpioConfig();
+	LedGpioConfig();		//PC1,PC3,PC13
 	SystickInit();
-	Lcd_Init();
+	Lcd_Init();				//PB9-PB15
 //	Gui_DrawFont_GBK16(16,140,RED,GRAY0, "Welcome");
-	Draw_Menu();
-	TIM3_PWM_init();
+	Draw_Menu();			//
+	TIM3_PWM_init();		//pwm初始化 PB0,PB1
+	KeyExit_pb7_config();	//按键初始化 PB7
+
+#if USART1_DMA_RT
+	UART1_Init();
+#else
+	uart_init(115200);		//串口初始化 115.2k;pa9,pa10
+#endif
+
+	ADC1Init();				//PC.0
 }
 
 

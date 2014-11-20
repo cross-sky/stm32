@@ -1,13 +1,22 @@
 #ifndef __TSYSTICK_H
 #define __TSYSTICK_H
 
-
-
-#define D_1MS	1000			//1ms中断1次,数字不能放前面，命名规则;
+#define TestEx 1
+extern u8 G_TestExcut;
 
 extern void SystickInit( void );
-
-
+void TestExcuteTimeGpioConfig(void);
+void TestExcuteTime(u8 state);
 
 #endif
+
+/*
+#if TestEx
+	TestExcuteTime(1);
+#endif
+
+#if TestEx
+	TestExcuteTime(0);
+#endif
+*/
 
