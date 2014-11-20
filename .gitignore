@@ -5,3 +5,9 @@
 /Demo/USER/Visual Studio Project/*.sdf
 /Demo/USER/Visual Studio Project/*.suo
 /Demo/USER/Visual Studio Project/*.vcxproj
+/Demo/USER/*.apple
+/Demo/USER/*.bak
+/Demo/USER/*.uvopt
+/Demo/USER/*.bak1
+/Demo/USER/*.dep
+/Demo/Listing/*.map
