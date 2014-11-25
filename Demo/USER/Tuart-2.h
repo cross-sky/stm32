@@ -2,7 +2,7 @@
 #define	__TUART2_H
 
 #include <stdio.h>
-
+#include"Tdso.h"
 
 #define USART1_Rx				USART1
 #define USART1_Rx_GPIO			GPIOA
@@ -38,5 +38,6 @@ void Usart1_Handle(void);
 void Dma1_Channel5Handle(void);
 void Dma1_Channel4Handle(void);
 void teesst(void);
+void DMASendAD(DSO_T *g_DSO);
 #endif
 

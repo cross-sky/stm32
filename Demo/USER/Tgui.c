@@ -167,6 +167,56 @@ void Gui_box2(u16 x,u16 y,u16 w,u16 h, u8 mode)
 	}
 }
 
+/*
+*********************************************************************************************************
+*	函 数 名: LCD_DrawRect
+*	功能说明: 绘制水平放置的矩形。
+*	形    参：
+*			_usX,_usY：矩形左上角的坐标
+*			_usHeight ：矩形的高度
+*			_usWidth  ：矩形的宽度
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+void LCD_DrawRect(uint16_t _usX, uint16_t _usY, uint8_t _usHeight, uint16_t _usWidth, uint16_t _usColor)
+{
+	/*
+	 ---------------->---
+	|(_usX，_usY)        |
+	V                    V  _usHeight
+	|                    |
+	 ---------------->---
+		  _usWidth
+	*/
+
+	Gui_DrawLine(_usX, _usY, _usX + _usWidth - 1, _usY, _usColor);	/* 顶 */
+	Gui_DrawLine(_usX, _usY + _usHeight - 1, _usX + _usWidth - 1, _usY + _usHeight - 1, _usColor);	/* 底 */
+
+	Gui_DrawLine(_usX, _usY, _usX, _usY + _usHeight - 1, _usColor);	/* 左 */
+	Gui_DrawLine(_usX + _usWidth - 1, _usY, _usX + _usWidth - 1, _usY + _usHeight - 1, _usColor);	/* 右 */
+}
+
+/*
+*********************************************************************************************************
+*	函 数 名: LCD_DrawPoints
+*	功能说明: 采用 Bresenham 算法，绘制一组点，并将这些点连接起来。可用于波形显示。
+*	形    参：
+*			x, y     ：坐标数组
+*			_usColor ：颜色
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+void LCD_DrawPoints(uint16_t *x, uint16_t *y, uint16_t _usSize, uint16_t _usColor)
+{
+	uint16_t i;
+
+	for (i = 0 ; i < _usSize - 1; i++)
+	{
+		Gui_DrawLine(x[i], y[i], x[i + 1], y[i + 1], _usColor);
+	}
+}
+
+
 
 /**************************************************************************************
 功能描述: 在屏幕显示一凸起的按钮框;
@@ -200,11 +250,13 @@ void DisplayButtonUp(u16 x1,u16 y1,u16 x2,u16 y2)
 }
 
 
-void Gui_DrawFont_GBK16(u16 x, u16 y, u16 fc, u16 bc, u8 *s)
+void Gui_DrawFont_GBK16(u16 x, u16 y, char *s ,FONT_T *tFont)
 {
-	unsigned char i,j;
+	unsigned char i,j,fc,bc;
 	unsigned short k,x0;
 	x0=x;
+	fc = tFont->usFontCode;
+	bc = tFont->usBackColor;
 
 	while(*s) 
 	{	
@@ -234,127 +286,127 @@ void Gui_DrawFont_GBK16(u16 x, u16 y, u16 fc, u16 bc, u8 *s)
 			s++;
 		}
 
-		else 
-		{
+// 		else 
+// 		{
 
 
-			for (k=0;k<hz16_num;k++) 
-			{
-				if ((hz16[k].Index[0]==*(s))&&(hz16[k].Index[1]==*(s+1)))
-				{ 
-					for(i=0;i<16;i++)
-					{
-						for(j=0;j<8;j++) 
-						{
-							if(hz16[k].Msk[i*2]&(0x80>>j))	Gui_DrawPoint(x+j,y+i,fc);
-							else {
-								if (fc!=bc) Gui_DrawPoint(x+j,y+i,bc);
-							}
-						}
-						for(j=0;j<8;j++) 
-						{
-							if(hz16[k].Msk[i*2+1]&(0x80>>j))	Gui_DrawPoint(x+j+8,y+i,fc);
-							else 
-							{
-								if (fc!=bc) Gui_DrawPoint(x+j+8,y+i,bc);
-							}
-						}
-					}
-				}
-			}
-			s+=2;x+=16;
-		} 
+// 			for (k=0;k<hz16_num;k++) 
+// 			{
+// 				if ((hz16[k].Index[0]==*(s))&&(hz16[k].Index[1]==*(s+1)))
+// 				{ 
+// 					for(i=0;i<16;i++)
+// 					{
+// 						for(j=0;j<8;j++) 
+// 						{
+// 							if(hz16[k].Msk[i*2]&(0x80>>j))	Gui_DrawPoint(x+j,y+i,fc);
+// 							else {
+// 								if (fc!=bc) Gui_DrawPoint(x+j,y+i,bc);
+// 							}
+// 						}
+// 						for(j=0;j<8;j++) 
+// 						{
+// 							if(hz16[k].Msk[i*2+1]&(0x80>>j))	Gui_DrawPoint(x+j+8,y+i,fc);
+// 							else 
+// 							{
+// 								if (fc!=bc) Gui_DrawPoint(x+j+8,y+i,bc);
+// 							}
+// 						}
+// 					}
+// 				}
+// 			}
+// 			s+=2;x+=16;
+// 		} 
 
 	}
 }
 
-void Gui_DrawFont_GBK24(u16 x, u16 y, u16 fc, u16 bc, u8 *s)
-{
-	unsigned char i,j;
-	unsigned short k;
+// void Gui_DrawFont_GBK24(u16 x, u16 y, u16 fc, u16 bc, u8 *s)
+// {
+// 	unsigned char i,j;
+// 	unsigned short k;
 
-	while(*s) 
-	{
-		if( *s < 0x80 ) 
-		{
-			k=*s;
-			if (k>32) k-=32; else k=0;
+// 	while(*s) 
+// 	{
+// 		if( *s < 0x80 ) 
+// 		{
+// 			k=*s;
+// 			if (k>32) k-=32; else k=0;
 
-			for(i=0;i<16;i++)
-				for(j=0;j<8;j++) 
-				{
-					if(asc16[k*16+i]&(0x80>>j))	
-						Gui_DrawPoint(x+j,y+i,fc);
-					else 
-					{
-						if (fc!=bc) Gui_DrawPoint(x+j,y+i,bc);
-					}
-				}
-				s++;x+=8;
-		}
-		else 
-		{
+// 			for(i=0;i<16;i++)
+// 				for(j=0;j<8;j++) 
+// 				{
+// 					if(asc16[k*16+i]&(0x80>>j))	
+// 						Gui_DrawPoint(x+j,y+i,fc);
+// 					else 
+// 					{
+// 						if (fc!=bc) Gui_DrawPoint(x+j,y+i,bc);
+// 					}
+// 				}
+// 				s++;x+=8;
+// 		}
+// 		else 
+// 		{
 
-			for (k=0;k<hz24_num;k++) 
-			{
-				if ((hz24[k].Index[0]==*(s))&&(hz24[k].Index[1]==*(s+1)))
-				{ 
-					for(i=0;i<24;i++)
-					{
-						for(j=0;j<8;j++) 
-						{
-							if(hz24[k].Msk[i*3]&(0x80>>j))
-								Gui_DrawPoint(x+j,y+i,fc);
-							else 
-							{
-								if (fc!=bc) Gui_DrawPoint(x+j,y+i,bc);
-							}
-						}
-						for(j=0;j<8;j++) 
-						{
-							if(hz24[k].Msk[i*3+1]&(0x80>>j))	Gui_DrawPoint(x+j+8,y+i,fc);
-							else {
-								if (fc!=bc) Gui_DrawPoint(x+j+8,y+i,bc);
-							}
-						}
-						for(j=0;j<8;j++) 
-						{
-							if(hz24[k].Msk[i*3+2]&(0x80>>j))	
-								Gui_DrawPoint(x+j+16,y+i,fc);
-							else 
-							{
-								if (fc!=bc) Gui_DrawPoint(x+j+16,y+i,bc);
-							}
-						}
-					}
-				}
-			}
-			s+=2;x+=24;
-		}
-	}
-}
-void Gui_DrawFont_Num32(u16 x, u16 y, u16 fc, u16 bc, u16 num)
-{
-	unsigned char i,j,k,c;
-	//lcd_text_any(x+94+i*42,y+34,32,32,0x7E8,0x0,sz32,knum[i]);
-	//	w=w/8;
+// 			for (k=0;k<hz24_num;k++) 
+// 			{
+// 				if ((hz24[k].Index[0]==*(s))&&(hz24[k].Index[1]==*(s+1)))
+// 				{ 
+// 					for(i=0;i<24;i++)
+// 					{
+// 						for(j=0;j<8;j++) 
+// 						{
+// 							if(hz24[k].Msk[i*3]&(0x80>>j))
+// 								Gui_DrawPoint(x+j,y+i,fc);
+// 							else 
+// 							{
+// 								if (fc!=bc) Gui_DrawPoint(x+j,y+i,bc);
+// 							}
+// 						}
+// 						for(j=0;j<8;j++) 
+// 						{
+// 							if(hz24[k].Msk[i*3+1]&(0x80>>j))	Gui_DrawPoint(x+j+8,y+i,fc);
+// 							else {
+// 								if (fc!=bc) Gui_DrawPoint(x+j+8,y+i,bc);
+// 							}
+// 						}
+// 						for(j=0;j<8;j++) 
+// 						{
+// 							if(hz24[k].Msk[i*3+2]&(0x80>>j))	
+// 								Gui_DrawPoint(x+j+16,y+i,fc);
+// 							else 
+// 							{
+// 								if (fc!=bc) Gui_DrawPoint(x+j+16,y+i,bc);
+// 							}
+// 						}
+// 					}
+// 				}
+// 			}
+// 			s+=2;x+=24;
+// 		}
+// 	}
+// }
+// void Gui_DrawFont_Num32(u16 x, u16 y, u16 fc, u16 bc, u16 num)
+// {
+// 	unsigned char i,j,k,c;
+// 	//lcd_text_any(x+94+i*42,y+34,32,32,0x7E8,0x0,sz32,knum[i]);
+// 	//	w=w/8;
 
-	for(i=0;i<32;i++)
-	{
-		for(j=0;j<4;j++) 
-		{
-			c=*(sz32+num*32*4+i*4+j);
-			for (k=0;k<8;k++)	
-			{
+// 	for(i=0;i<32;i++)
+// 	{
+// 		for(j=0;j<4;j++) 
+// 		{
+// 			c=*(sz32+num*32*4+i*4+j);
+// 			for (k=0;k<8;k++)	
+// 			{
 
-				if(c&(0x80>>k))	Gui_DrawPoint(x+j*8+k,y+i,fc);
-				else {
-					if (fc!=bc) Gui_DrawPoint(x+j*8+k,y+i,bc);
-				}
-			}
-		}
-	}
-}
+// 				if(c&(0x80>>k))	Gui_DrawPoint(x+j*8+k,y+i,fc);
+// 				else {
+// 					if (fc!=bc) Gui_DrawPoint(x+j*8+k,y+i,bc);
+// 				}
+// 			}
+// 		}
+// 	}
+// }
 
 void Gui_DrawFont_Num16(u16 x, u16 y, u16 fc, u16 bc, u16 num)
 {

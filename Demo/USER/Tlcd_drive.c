@@ -11,12 +11,18 @@
 void LCD_GPIO_Init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB, ENABLE);
+	RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB|RCC_APB2Periph_GPIOA, ENABLE);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9| GPIO_Pin_10| GPIO_Pin_11| GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14| GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9| GPIO_Pin_10;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6| GPIO_Pin_7;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
 }
 
 void SPIv_WriteData(u8 Data)
@@ -65,23 +71,28 @@ void SPI2_Init(void)
 	SPI_InitTypeDef SPI_InitStructure;
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	RCC_APB2PeriphClockCmd( RCC_APB2Periph_AFIO|RCC_APB2Periph_GPIOB, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13|GPIO_Pin_15;
+	RCC_APB2PeriphClockCmd( RCC_APB2Periph_AFIO|RCC_APB2Periph_GPIOB|RCC_APB2Periph_GPIOA, ENABLE);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_7;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10| GPIO_Pin_11| GPIO_Pin_12;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-	RCC_APB1PeriphClockCmd( RCC_APB1Periph_SPI2, ENABLE);
+	RCC_APB2PeriphClockCmd( RCC_APB2Periph_SPI1, ENABLE);
 	
 	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
 	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
@@ -92,38 +103,38 @@ void SPI2_Init(void)
 	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
 	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
 	SPI_InitStructure.SPI_CRCPolynomial = 7;
-	SPI_Init(SPI2, &SPI_InitStructure);
+	SPI_Init(SPI1, &SPI_InitStructure);
 
-	SPI_Cmd(SPI2, ENABLE);
+	SPI_Cmd(SPI1, ENABLE);
 
 }
 
 //写一个8位指令;
 void Lcd_WriteIndex( u8 Index)
 {
-	LCD_CS_CLR;
+//	LCD_CS_CLR;
 	LCD_RS_CLR;
 #if USE_HARDWARE_SPI
-	SPI_WriteByte(SPI2, Index);
+	SPI_WriteByte(SPI1, Index);
 #else
 	SPIv_WriteData(Index);
 #endif
 
-	LCD_CS_SET;
+//	LCD_CS_SET;
 }
 
 //写一个8位数据;
 void Lcd_WriteData(u8 Data)
 {
-	LCD_CS_CLR;
+//	LCD_CS_CLR;
 	LCD_RS_SET;
 #if USE_HARDWARE_SPI
-	SPI_WriteByte(SPI2,Data);
+	SPI_WriteByte(SPI1,Data);
 #else
 	SPIv_WriteData(Data);
 #endif
 
-	LCD_CS_SET;
+//	LCD_CS_SET;
 
 }
 
@@ -155,9 +166,9 @@ static void DelayMs(u16 tim)
 void Lcd_Reset(void)
 {
 	LCD_RST_CLR;
-	DelayMs(500);
+	DelayMs(150);
 	LCD_RST_SET;
-	DelayMs(500);
+	DelayMs(150);
 }
 
 void Lcd_Init(void)
@@ -214,9 +225,9 @@ void Lcd_Init(void)
 
 	Lcd_WriteIndex(0x36);    // Memory Access Control 
 #ifdef USE_HORIZONTAL
-	Lcd_WriteData(0xE8); //C8	   //48 68竖屏//28 E8 横屏;
+	Lcd_WriteData(0x38); //C8	   //48 68竖屏//28 E8 横屏;
 #else
-	Lcd_WriteData(0x48); 
+	Lcd_WriteData(0xC8); 
 #endif
 
 	Lcd_WriteIndex(0x3A);    

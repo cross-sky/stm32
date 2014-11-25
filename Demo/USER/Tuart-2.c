@@ -40,7 +40,7 @@ void UART1_Init(void)
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
 	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;;
 	DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
-	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+	DMA_InitStructure.DMA_Priority = DMA_Priority_Medium;
 	DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
 
 	DMA_Init(DMA1_Ch_Usart1_Tx,&DMA_InitStructure);
@@ -181,4 +181,12 @@ void teesst(void)
 	TestExcuteTime(0);
 		G_TestExcut=0;
 #endif
+}
+
+void DMASendAD(DSO_T *g_DSO)
+{
+	DMA_SetCurrDataCounter(DMA1_Channel4,10);
+	DMA1_Channel4->CMAR = (uint32_t)&g_DSO->Ch1Buf;
+	DMA_Cmd(DMA1_Channel4,ENABLE);
+
 }

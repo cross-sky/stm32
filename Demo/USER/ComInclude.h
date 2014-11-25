@@ -12,10 +12,13 @@
 #include "Tpwm.h"
 #include "Tkey.h"
 #include "Tuart.h"
-#include "Tadc.h"
+//#include "Tadc.h"
 #include "Tuart-2.h"
 #include "TusartApp.h"
-
+//#include "Tdso.h"
+#include <stdio.h>
+#include <string.h>
+#include "Tdso-v2.h"
 #define USART1_DMA_RT	1  //1dma发送、接收，0dma发送，中断接收
 
 //IO口操作,只对单一的IO口!

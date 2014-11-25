@@ -152,7 +152,7 @@ void EXTI9_5_IRQHandler(void)
 		GPIO_WriteBit( GPIOC, GPIO_Pin_3,
 			( BitAction)( (1-GPIO_ReadOutputDataBit( GPIOC, GPIO_Pin_3))));
 
-				
+		Tim3SetHandle();		
 		EXTI_ClearITPendingBit( EXTI_Line7 );
 
 
@@ -216,6 +216,12 @@ void DMA1_Channel4_IRQHandler(void)
 #endif	
 
 }
+
+void DMA1_Channel1_IRQHandler(void)
+{
+	Dma1_Channel1Handle();
+}
+
 /*
 	u8 i;
 	extern u16 i2c_rx_buf[14]; 
