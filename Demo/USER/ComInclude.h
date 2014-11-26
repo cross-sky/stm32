@@ -11,7 +11,7 @@
 #include "TguiDemo.h"
 #include "Tpwm.h"
 #include "Tkey.h"
-#include "Tuart.h"
+//#include "Tuart.h"
 //#include "Tadc.h"
 #include "Tuart-2.h"
 #include "TusartApp.h"

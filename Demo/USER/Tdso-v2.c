@@ -9,7 +9,7 @@ const u8  Simple_Prescal[]={0,		0,		0,		0,		0,		0,		1,		9};
 T_DSO g_DsoA;
 
 //DMA数据，寻找触发点
-//若没找到，重新开dma，T1定时器
+//若没找到，重新开dma，T2定时器 cc2触发
 //20ms循环1次
 void DMAReadAdc(void)
 {
@@ -51,7 +51,7 @@ void DMAReadAdc(void)
 			DMA1_Channel1->CNDTR = DMA_ADCBUFSIZE;
 			DMA1_Channel1->CMAR = (uint32_t)&g_DsoA.DMA_ADCBuf;
 			DMA_Cmd(DMA1_Channel1,ENABLE);
-			TIM_Cmd(TIM1, ENABLE);
+			TIM_Cmd(TIM2, ENABLE);
 		}
 
 
@@ -74,7 +74,7 @@ static void Set_SampRate(T_DSO *g_DsoA)
 	TIM_OCInitTypeDef			TIM_OCInitStructure;
 //	uint16_t Period;
 
-	TIM_Cmd(TIM1, DISABLE);
+	TIM_Cmd(TIM2, DISABLE);
 
 	/*
 	采样频率计算公式 ：
@@ -85,27 +85,27 @@ static void Set_SampRate(T_DSO *g_DsoA)
 //	Period = 72000 / freq -1;		
 
 	/* 使能 TIM1 时钟 */
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 
 	TIM_TimeBaseStructInit(&TIM_TimeBaseStructure); 
 	TIM_TimeBaseStructure.TIM_Period = g_DsoA->SimplePeriod;          
 	TIM_TimeBaseStructure.TIM_Prescaler = g_DsoA->SimplePrescal;   /* 计数频率 = 72000 000 / 18 = 4000 000	 */
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0x0;    
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  
-	TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
 
 	/* TIM1 通道1配置为PWM模式 */
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; 
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;                
 	TIM_OCInitStructure.TIM_Pulse = TIM_TimeBaseStructure.TIM_Period / 2; 
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;         
-	TIM_OC3Init(TIM1, &TIM_OCInitStructure);
+	TIM_OC2Init(TIM2, &TIM_OCInitStructure);
 
 	/* TIM1 计数器使能 */
-	TIM_Cmd(TIM1, ENABLE);
+	TIM_Cmd(TIM2, ENABLE);
 
 	/* TIM1 输出使能 */
-	TIM_CtrlPWMOutputs(TIM1, ENABLE);  
+	TIM_CtrlPWMOutputs(TIM2, ENABLE);  
 }
 
 static void Init_DSO(T_DSO *g_DsoA)
@@ -162,7 +162,7 @@ static void Init_DSO(T_DSO *g_DsoA)
 	ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
 	ADC_InitStructure.ADC_ScanConvMode = DISABLE;
 	ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;		/* 连续转换静止 */
-	ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T1_CC3;	/* 选择TIM1的CC3做触发 */
+	ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T2_CC2;	/* 选择TIM1的CC3做触发 */
 
 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;	/* 数据右对齐,高位为0 */
 	ADC_InitStructure.ADC_NbrOfChannel = 1;	/* 1个通道 */
@@ -203,7 +203,7 @@ void Dma1_Channel1Handle(void)
 	DMA_ClearITPendingBit(DMA1_IT_TE1);
 	g_DsoA.DMAState=1;//DMA传输完成
 	DMA_Cmd(DMA1_Channel1,DISABLE);
-	TIM_Cmd(TIM1, DISABLE);
+	TIM_Cmd(TIM2, DISABLE);
 
 }
 
@@ -434,7 +434,7 @@ void TaskDso(void)
 		DMA1_Channel1->CNDTR = DMA_ADCBUFSIZE;
 		DMA1_Channel1->CMAR = (uint32_t)&g_DsoA.DMA_ADCBuf;
 		DMA_Cmd(DMA1_Channel1,ENABLE);
-		TIM_Cmd(TIM1, ENABLE);
+		TIM_Cmd(TIM2, ENABLE);
 	}
 
 

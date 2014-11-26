@@ -162,13 +162,13 @@ void EXTI9_5_IRQHandler(void)
 }
 
 
-void USART1_IRQHandler( void )
+void USART2_IRQHandler( void )
 {
-#if USART1_DMA_RT
-	Usart1_Handle();
-#else
-	UART1Receive();
-#endif
+//#if USART1_DMA_RT
+	Usart2_Handle();
+// #else
+// 	UART1Receive();
+// #endif
 }
 
 // 	if ( USART_GetITStatus( USART1, USART_IT_RXNE) != RESET)
@@ -199,21 +199,21 @@ void USART1_IRQHandler( void )
 
 //}
 
-void DMA1_Channel5_IRQHandler(void)
+void DMA1_Channel6_IRQHandler(void)
 {
-	Dma1_Channel5Handle();
+	Dma1_Channel6Handle();
 }
 
-void DMA1_Channel4_IRQHandler(void)
+void DMA1_Channel7_IRQHandler(void)
 {
 
-#if USART1_DMA_RT
-	Dma1_Channel4Handle();
-#else
-	DMA_ClearFlag(DMA1_FLAG_TC4);
-	DMA_Cmd(DMA1_Channel4,DISABLE);
-	Flag_uart_send = 1;
-#endif	
+//#if USART1_DMA_RT
+	Dma1_Channel7Handle();
+// #else
+// 	DMA_ClearFlag(DMA1_FLAG_TC4);
+// 	DMA_Cmd(DMA1_Channel4,DISABLE);
+// 	Flag_uart_send = 1;
+// #endif	
 
 }
 

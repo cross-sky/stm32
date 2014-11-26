@@ -7,10 +7,10 @@ TPC_TASK TaskComps[]=
 //	{0, 250,  250, TaskLineLevel},
 //	{0, 500,  500, Draw_Menu},
 //	{0, 250,  250, TaskDrawNum},
-	{0, 5,	  5,   Usart1SendBackTest},//没加任务....
+//	{0, 5,	  5,   teesst},//没加任务....
 //	{0, 250,  250, AdcValue},
 	{0,	250,  250, UsartDmaTest},
-	{0,	125,	125,  TaskDso},
+	{0,	100,	100,  TaskDso},
 	{0,	5,	  5,   DMAReadAdc},
 //	{0,	25,	  25,  TdsoRun},
 

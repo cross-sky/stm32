@@ -57,24 +57,24 @@ enum
 #define LCD_LED        	GPIO_Pin_9  //MCU_PB9--->>TFT --BL
 #define LCD_RS         	GPIO_Pin_10	//PB10--->>TFT --RS/DC
 //#define LCD_CS        	GPIO_Pin_11 //MCU_PB11--->>TFT --CS/CE  已接地；
-#define LCD_RST     	GPIO_Pin_4	//Pa4--->>TFT --RST
-#define LCD_SCL        	GPIO_Pin_5	//Pa5--->>TFT --SCL/SCK
-#define LCD_SDA        	GPIO_Pin_7	//Pa7 MOSI--->>TFT --SDA/DIN
+#define LCD_RST     	GPIO_Pin_12	//Pb12--->>TFT --RST
+#define LCD_SCL        	GPIO_Pin_13	//Pb13--->>TFT --SCL/SCK
+#define LCD_SDA        	GPIO_Pin_15	//Pb15 MOSI--->>TFT --SDA/DIN
 
 //液晶控制口置1操作语句宏定义；
 //#define	LCD_CS_SET  	LCD_CTRL->BSRR=LCD_CS    
 #define	LCD_RS_SET  	GPIOB->BSRR=LCD_RS    
-#define	LCD_SDA_SET  	GPIOA->BSRR=LCD_SDA    
-#define	LCD_SCL_SET  	GPIOA->BSRR=LCD_SCL    
-#define	LCD_RST_SET  	GPIOA->BSRR=LCD_RST    
+#define	LCD_SDA_SET  	GPIOB->BSRR=LCD_SDA    
+#define	LCD_SCL_SET  	GPIOB->BSRR=LCD_SCL    
+#define	LCD_RST_SET  	GPIOB->BSRR=LCD_RST    
 #define	LCD_LED_SET  	GPIOB->BSRR=LCD_LED 
 
 //液晶控制口置0操作语句宏定义；
 //#define	LCD_CS_CLR  	LCD_CTRL->BRR=LCD_CS    
 #define	LCD_RS_CLR  	GPIOB->BRR=LCD_RS    
-#define	LCD_SDA_CLR  	GPIOA->BRR=LCD_SDA    
-#define	LCD_SCL_CLR  	GPIOA->BRR=LCD_SCL    
-#define	LCD_RST_CLR  	GPIOA->BRR=LCD_RST    
+#define	LCD_SDA_CLR  	GPIOB->BRR=LCD_SDA    
+#define	LCD_SCL_CLR  	GPIOB->BRR=LCD_SCL    
+#define	LCD_RST_CLR  	GPIOB->BRR=LCD_RST    
 #define	LCD_LED_CLR  	GPIOB->BRR=LCD_LED 
 
 // #define LCD_DATAOUT(x) LCD_DATA->ODR=x; //数据输出;
