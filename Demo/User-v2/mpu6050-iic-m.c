@@ -1,4 +1,4 @@
-#include "ComInclude.h"
+#include "cominc.h"
 
 int16_t mympu[7];
 float tTemp[7];
@@ -289,3 +289,7 @@ void mpu6050m_init(void )
 	single_write(MPU6050_Addr,ACCEL_CONFIG,0x01);
 }
 
+void MpuDisPlay(void)
+{
+
+}

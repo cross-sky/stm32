@@ -1,4 +1,4 @@
-#include "ComInclude.h"
+#include "cominc.h"
 
 //const u8* hs_stab[]={"50us",	"100us","200us","1ms",	"2ms",	"10ms","20ms","100ms"};
 const u8  Simple_Num[]={20,		40,		40,		100,	100,	100,	100,	100};
@@ -102,7 +102,7 @@ static void Set_SampRate(T_DSO *g_DsoA)
 	TIM_OC2Init(TIM2, &TIM_OCInitStructure);
 
 	/* TIM1 计数器使能 */
-	TIM_Cmd(TIM2, ENABLE);
+	TIM_Cmd(TIM2, DISABLE);
 
 	/* TIM1 输出使能 */
 	TIM_CtrlPWMOutputs(TIM2, ENABLE);  
@@ -447,8 +447,8 @@ void InitDso(void)
 	Lcd_Clear(CL_BLUE);
 	DsoInitParam();
 	Init_DSO(&g_DsoA);
-	FrameDisp();
-	ChInfoDisp();
+//	FrameDisp();
+//	ChInfoDisp();
 }
 
 

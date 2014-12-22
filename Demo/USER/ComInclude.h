@@ -21,6 +21,7 @@
 #include "Tdso-v2.h"
 #include "Twavedac.h"
 #include "stm32f10x_dac.h"
+#include "mpu6050m.h"
 
 #define USART1_DMA_RT	1  //1dma发送、接收，0dma发送，中断接收
 

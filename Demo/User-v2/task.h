@@ -8,9 +8,11 @@
 
 #include "stm32f10x.h"
 
+//增加程序挂起标记
 typedef struct _TPC_TASK 
 {
 	u8 Run;   //运行标记，0-不运行，1-运行；
+	u8 Suspend; //挂起标记，0-不挂起，1-挂起；
 	u16 Timer;  //计时器；
 	u16 ItvTime;  // 任务运行间隔时间；
 	void ( *TaskHook )(void);  //运行的任务函数；
@@ -31,14 +33,11 @@ typedef enum
 typedef enum 
 {
 	TASK_LED1ON,
-//	TASK_LINELEVEL,
-//	TASK_DRAWMENU,
-//	TASK_DRAWNUM,
-//	TASK_USARTTEST,
-//	TASK_ADC,
 	TASK_UARTDMA,
+	TASK_MENU,
+	TASK_BUTTON,
+	TASK_RDADC,
 	TASK_DSO,
-	TASK_TRIGEN,
 	TASK_MPU,
 	TASKS_MAX
 } TASK_LIST;

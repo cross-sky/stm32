@@ -12,6 +12,7 @@ TPC_TASK TaskComps[]=
 	{0,	250,  250, UsartDmaTest},
 	{0,	100,	100,  TaskDso},
 	{0,	5,	  5,   DMAReadAdc},
+	{0,	250,  250, MpuRead},
 //	{0,	25,	  25,  TdsoRun},
 
 //	{0, 500,  500,  TaskLineVertical},
@@ -22,13 +23,13 @@ TPC_TASK TaskComps[]=
 void TaskInit(void)
 {
 	LedGpioConfig();		//PC1,PC3,PC13
-	SystickInit();
+	
 	Lcd_Init();				//PB9-PB10,pa4-pa7
 //	Gui_DrawFont_GBK16(16,140,RED,GRAY0, "Welcome");
 //	Draw_Menu();			//
 	TIM3_PWM_init();		//pwm初始化 PB0,PB1
 	KeyExit_pb7_config();	//按键初始化 PB7
-
+	mpu6050m_init();
 #if USART1_DMA_RT
 	UART1_Init();
 #else
@@ -37,6 +38,7 @@ void TaskInit(void)
 	InitDso();
 //	TDsoInit();				//pb15
 //	ADC1Init();				//PC.0
+	SystickInit();
 }
 
 
